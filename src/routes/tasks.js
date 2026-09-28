@@ -74,5 +74,21 @@ export default async function tasksRoute(req, res) {
     });
     return true;
   }
+
+  if (req.method === "DELETE" && req.url.startsWith("/api/tasks/")) {
+    const id = req.url.split("/").pop();
+    db.run("DELETE FROM tasks WHERE id = ?", [id], function (err) {
+      if (err) {
+        console.log(err);
+        res.writeHead(500);
+        res.end(err.message);
+        return;
+      }
+      res.writeHead(204);
+      res.end();
+    });
+    return true;
+  }
+
   return false;
 }
